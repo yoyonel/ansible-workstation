@@ -1,0 +1,3 @@
+---
+- include: install_essentials.yml
+- include: install_with_snap.yml

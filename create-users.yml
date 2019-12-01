@@ -1,0 +1,8 @@
+---
+- hosts: '{{inventory}}'
+  vars_files:
+    - vars/secret
+  become: yes
+  roles:
+    # https://galaxy.ansible.com/ryandaniels/create_users
+    - ryandaniels.create_users

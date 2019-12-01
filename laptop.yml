@@ -1,0 +1,132 @@
+---
+- hosts: all
+  become: yes
+  vars:
+
+    zsh_autosuggestions_bind_key: "^U"
+    zsh_user: "{{ user_name }}"
+    # https://github.com/nickjj/ansible-docker#version
+    docker__state: "latest"
+    # https://github.com/nickjj/ansible-docker#configuring-users-to-run-docker-without-root
+    docker__users: ["{{ user_name }}"]
+    # https://github.com/nickjj/ansible-docker#installing-docker-compose
+    docker__compose_version: ""
+    #
+    docker__cron_jobs_prune_flags: "af"
+    docker__cron_jobs_prune_schedule: ["0", "0", "*", "*", "0"]
+    docker__cron_jobs:
+      - name: "Docker disk clean up"
+        job: "docker system prune -{{ docker__cron_jobs_prune_flags }} > /dev/null 2>&1"
+        schedule: "{{ docker__cron_jobs_prune_schedule }}"
+        cron_file: "docker-disk-clean-up"
+    #
+    home: "/home/{{ user_name }}"
+    #
+    pyenv_env: "user"
+    pyenv_setting_path: "/home/{{ user_name }}/.zshrc"
+
+  roles:
+    #
+    - role: nickjj.user
+      tags: user
+    # https://docs.ansible.com/ansible/latest/user_guide/playbooks_tags.html
+    # -> ansible-playbook -i /etc/ansible/hosts laptop.yml --tags "common"
+    - role: common
+      tags: common
+    # https://devhub.io/repos/viasite-ansible-ansible-role-zsh
+    - role: viasite-ansible.zsh
+      name: ZSH + AntiGEN
+      tags: shell
+    # https://github.com/nickjj/ansible-docker
+    - role: nickjj.docker
+      name: Docker + DockerCompose
+      tags: docker
+    # https://galaxy.ansible.com/nephelaiio/tmux
+    # https://github.com/nephelaiio/ansible-role-tmux
+    - role: nephelaiio.tmux
+      name: TMux
+      tags: tmux
+    # https://galaxy.ansible.com/avanov/pyenv
+    - role: avanov.pyenv
+      name: Python - PyENV
+      tags: [python,pyenv]
+      pyenv_path: "{{ home }}/pyenv"
+      # pyenv_owner: "{{ instance_owner }}"
+      pyenv_global: "3.7.2"
+      pyenv_update_git_install: no
+      pyenv_enable_autocompletion: no
+      pyenv_python_versions:
+        - "3.7.2"
+        - "3.6.5"
+        - "3.5.6"
+      pyenv_virtualenvs:
+        - venv_name: "latest_v3"
+          py_version: "3.7.2"
+        - venv_name: "py3.5.6_365talents_nodejs"
+          py_version: "3.5.6"
+    # https://github.com/drew-kun/ansible-nerdfonts
+    # - role: drew-kun.nerdfonts
+    #   name: Fonts - NERDFONTS
+    #   tags: [font,nerdfonts]
+    #   nerdfonts_users: [latty]
+    #   nerdfonts_deb_env: "system"
+    # https://github.com/Oefenweb/ansible-pycharm/
+    - role: oefenweb.pycharm
+      name: IDE - Pycharm
+      tags: [ide,pycharm]
+      pycharm_edition: professional
+    - role: pycharm_plugins
+      name: IDE - Pycharm - Plugins
+      tags: [pycharm,pycharm-plugins]
+      pycharm_plugins:
+        # BashSupport - 1.7.15.192
+        - 72819
+        # black-pycharm 1.0.6
+        - 45310
+        # CMD Support 1.0.5
+        - 18875
+        # Docker 193.5233.109
+        - 73456
+        # Grep Console 9.8.192.4205.1
+        - 66555
+        # Makefile support 1.6.1
+        - 59152
+        # Material Theme UI Plugin 4.10.0
+        - 73506
+        # Protobuf Support 0.13.0
+        - 59364
+        # Rainbow Brackets 5.27
+        - 73032
+        # Requirements 2019.6.0.1
+        - 72705
+        # Toml 0.2.0.33-193
+        - 72543
+        # YAML/Ansible support 0.9.5
+        - 35585        
+    # https://galaxy.ansible.com/gantsign/visual-studio-code
+    - role: gantsign.visual-studio-code
+      name: install Visual Studio Code
+      tags: [ide,vscode]
+    - role: vscode_plugins
+      name: IDE - Visual Studio Code - Extensions
+      tags: [vscode,vscode-extensions]
+      users:
+        - username: "{{ user_name }}"
+          visual_studio_code_extensions:
+            - streetsidesoftware.code-spell-checker
+            - wholroyd.jinja
+            - ms-python.python
+            - naumovs.color-highlight            
+            - tcwalther.cython
+            - ms-azuretools.vscode-docker
+            - yzhang.markdown-all-in-one
+            - esbenp.prettier-vscode
+            - slevesque.shader
+            - ms-vscode.cpptools
+          visual_studio_code_settings: {
+            "editor.rulers": [80, 100, 120],
+            "editor.renderWhitespace": true,
+            "files.associations": {
+              "Vagrantfile": "ruby"
+            }
+          }

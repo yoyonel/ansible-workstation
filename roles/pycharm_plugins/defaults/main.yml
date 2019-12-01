@@ -1,0 +1,4 @@
+---
+pycharm_plugin_download_mirror: "https://plugins.jetbrains.com/plugin/download?updateId="
+pycharm_download_directory: ~/.pycharm
+pycharm_plugins: []
