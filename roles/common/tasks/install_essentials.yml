@@ -1,0 +1,50 @@
+---
+
+# https://github.com/geerlingguy/ansible-role-docker/issues/77
+
+- name: install essentials (Debian)
+  when: ansible_os_family == "Debian"
+  apt:
+    pkg: 
+      - ansible
+      - apt-file
+      - bmon
+      - bzip2
+      - command-not-found
+      - curl
+      - figlet
+      - git
+      - htop
+      - iotop
+      - locate
+      - make
+      - mesa-utils
+      - ncdu
+      - python-pygments
+      - pwgen
+      - snapd
+      - strace
+      - sudo
+      - tar
+      - tmux
+      - tree
+      - unzip
+      - vim
+      - virtualenvwrapper
+      - w3m
+      - wget
+      - whois
+      - zip    
+    update_cache: yes
+    state: latest
+    force_apt_get: True
+
+# curl --silent "https://api.github.com/repos/jwilm/alacritty/releases/latest" | jq -r '.assets[0].browser_download_url'
+# https://github.com/jwilm/alacritty/releases/download/v0.4.0/Alacritty-v0.4.0-ubuntu_18_04_amd64.deb
+- name: install Alacritty (Debian)
+  when: ansible_os_family == "Debian"
+  apt:
+    deb: https://github.com/jwilm/alacritty/releases/download/v0.4.0/Alacritty-v0.4.0-ubuntu_18_04_amd64.deb
+    update_cache: yes
+    state: present
+    force_apt_get: True

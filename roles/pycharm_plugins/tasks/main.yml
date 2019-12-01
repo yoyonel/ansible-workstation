@@ -1,0 +1,17 @@
+---
+# tasks file for pycharm
+# https://github.com/Oefenweb/ansible-pycharm/blob/master/tasks/main.yml
+- name: Download PyCharm plugins
+  get_url:
+    url: "{{ pycharm_plugin_download_mirror }}{{ item }}"
+    dest: "{{ pycharm_downloads_path }}"
+  register: pycharm_plugins_downloaded
+  with_items: "{{ pycharm_plugins }}"
+
+- name: Install PyCharm Plugins
+  unarchive:
+    src: "{{ item.dest }}"
+    dest: "{{ pycharm_install_prefix }}/pycharm-{{ pycharm_version }}/plugins"
+    remote_src: yes
+  with_items: "{{ pycharm_plugins_downloaded.results }}"
+
