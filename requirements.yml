@@ -1,0 +1,8 @@
+# from galaxy
+- src: nickjj.user
+- src: viasite-ansible.zsh
+- src: nickjj.docker
+- src: nephelaiio.tmux
+- src: avanov.pyenv
+- src: oefenweb.pycharm
+- src: gantsign.visual-studio-code
