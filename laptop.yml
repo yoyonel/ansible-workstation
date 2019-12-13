@@ -1,7 +1,10 @@
 ---
 - hosts: all
-  become: yes
+  become: True
+
   vars:
+
+    user_shell: "/bin/zsh"
 
     zsh_autosuggestions_bind_key: "^U"
     zsh_user: "{{ user_name }}"
@@ -85,14 +88,14 @@
         - 45310
         # CMD Support 1.0.5
         - 18875
-        # Docker 193.5233.109
-        - 73456
+        # Docker 193.5662.7
+        - 73789
         # Grep Console 9.8.192.4205.1
         - 66555
         # Makefile support 1.6.1
         - 59152
-        # Material Theme UI Plugin 4.10.0
-        - 73506
+        # Material Theme UI 4.11.0
+        - 73965
         # Protobuf Support 0.13.0
         - 59364
         # Rainbow Brackets 5.27
@@ -103,30 +106,31 @@
         - 72543
         # YAML/Ansible support 0.9.5
         - 35585        
+    # https://github.com/microsoft/vscode/issues/86858
     # https://galaxy.ansible.com/gantsign/visual-studio-code
-    - role: gantsign.visual-studio-code
-      name: install Visual Studio Code
-      tags: [ide,vscode]
-    - role: vscode_plugins
-      name: IDE - Visual Studio Code - Extensions
-      tags: [vscode,vscode-extensions]
-      users:
-        - username: "{{ user_name }}"
-          visual_studio_code_extensions:
-            - streetsidesoftware.code-spell-checker
-            - wholroyd.jinja
-            - ms-python.python
-            - naumovs.color-highlight            
-            - tcwalther.cython
-            - ms-azuretools.vscode-docker
-            - yzhang.markdown-all-in-one
-            - esbenp.prettier-vscode
-            - slevesque.shader
-            - ms-vscode.cpptools
-          visual_studio_code_settings: {
-            "editor.rulers": [80, 100, 120],
-            "editor.renderWhitespace": true,
-            "files.associations": {
-              "Vagrantfile": "ruby"
-            }
-          }
+    # - role: gantsign.visual-studio-code
+    #   name: install Visual Studio Code
+    #   tags: [ide,vscode]
+    # - role: vscode_plugins
+    #   name: IDE - Visual Studio Code - Extensions
+    #   tags: [vscode,vscode-extensions]
+    #   users:
+    #     - username: "{{ user_name }}"
+    #       visual_studio_code_extensions:
+    #         - streetsidesoftware.code-spell-checker
+    #         - wholroyd.jinja
+    #         - ms-python.python
+    #         - naumovs.color-highlight            
+    #         - tcwalther.cython
+    #         - ms-azuretools.vscode-docker
+    #         - yzhang.markdown-all-in-one
+    #         - esbenp.prettier-vscode
+    #         - slevesque.shader
+    #         - ms-vscode.cpptools
+    #       visual_studio_code_settings: {
+    #         "editor.rulers": [80, 100, 120],
+    #         "editor.renderWhitespace": true,
+    #         "files.associations": {
+    #           "Vagrantfile": "ruby"
+    #         }
+    #       }
